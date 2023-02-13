@@ -1,0 +1,31 @@
+
+
+_______________ATT GÖRA & BUGGFIXAR
+
+
+* Knapp för radera spelare i scoreboard PVP ej länkad
+
+
+* Rensa kod igen! 
+
+* Felmeddelande vid raderning av spelare om textfält är tomt
+
+_______________PÅGÅENDE
+* Scoreboard -> När endast ett namn, går det ej ta bort längre
+
+
+
+
+
+
+
+
+_______________ÅTGÄRDAT
+* Går ej att radera denna sessions gamestats från scoreboarden
+* koppla knapp för "vanligt" i gamemode overlay till reload-funktion
+* Fixa toggleOverlay bugg (scoreboard singleplayer -> ta bort spelare -> ändra spelläge)
+    Problem på delete-knappen i sig? -> remove-results-with-specifik-name-button
+     -> removePlayerDataButton
+     <button class="button close" id="remove-player-data-modal-close-button">X</button>
+     -> removeSpecificPlayerDataModal
+* Går ej att radera spelare två gånger (overlayToggle-problem)

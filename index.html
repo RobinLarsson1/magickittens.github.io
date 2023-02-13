@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> Hangman - Magic Kittens </title>
+	<!-- Style -->
+	<link rel="stylesheet" href="style.css">
+	<!-- Icons and fonts -->
+	<link rel="shortcut icon" href="logo.png" />
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Carter+One&family=Poppins&display=swap" rel="stylesheet">
+
+	<!-- Script -->
+	<script src="filteredWords.js" defer></script>
+	<script src="DOMfetches.js" defer></script>
+	<script src="difficulty.js" defer></script>
+	<script src="modaler.js" defer></script>
+	<script src="hangman.js" defer></script>
+	<script src="eventlistener.js" defer></script>
+	<script src="functions.js" defer></script>
+	<script src="script.js" defer></script>
+</head>
+
+<body id="body">
+	<!-- Sections -->
+	<section class="main-section">
+
+		<section class="middle-section"> 
+			
+			<!-- Game -->
+			<section class="game-section">
+				
+				<!-- GAME HEADER -->
+				<header class="header">
+					<h1 class="main-title">Hangman</h1>
+					
+					<div class="header-buttons">
+
+						<!-- HEADER-KNAPP: Om spelet -->
+						<button id="about-game-button" class="header-button" title="Om spelet">
+							<span class="material-symbols-outlined">
+								info
+							</span>
+						</button>
+
+						<!-- HEADER-KNAPP: Reset -->
+						<button id="reset-game-button" class="header-button" title="Starta om spelet">
+							<span class="material-symbols-outlined">
+								restart_alt
+							</span>
+						</button>
+
+						<!-- HEADER-KNAPP: Ändra spelläge -->
+						<button id="change-gamemode-button" class="header-button" title="Ändra läge">
+							<span class="material-symbols-outlined">
+								sports_score
+							</span>
+						</button>
+
+						<!-- HEADER-KNAPP: Scoreboard -->
+						<button id="show-scoreboard-button" class="header-button" title="Visa scoreboarden">
+							<span class="material-symbols-outlined">
+								scoreboard
+							</span>
+						</button>
+				</header>
+
+				<!-- SPELINFO (spelarnamn + gissningar) -->
+				<div id="top-div">
+					<!-- container för spelare -->
+					<div id="player-input" class="player-input">
+						<p>Spelare: </p>
+						<p id="player-name-placeholder"> </p>
+					</div>
+
+					<!-- container för antal gissningar -->
+					<div class="number-of-guesses">
+						Felgissningar: <span id="mistakes"></span> av <span id="maxWrong"></span>
+					</div>
+				</div>
+
+				<section class="hero-section">
+					<!-- gubben här -->
+					<figure class="gubben">
+						<svg id="hangman-picture" width="501" height="565" viewBox="0 0 501 565" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+					</figure>
+					<!-- Hemliga ordet -->
+					<div id="nyBokstav"></div>
+					<div id="correctLetters">
+						<p id="svar"></p>
+					</div>
+					<p id="guessed-letters"></p>
+				</section>
+			</section>
+
+			<!-- SCOREBOARD -->
+			<section class="scoreboard-section hidden">
+				<header id ="scoreboard-header" class="header">
+					<h1 class="scoreboard-title">Scoreboard</h1>
+					<div class="header-buttons">
+
+						<span>Sortera listan</span>
+						
+						<!-- SCOREBOARD-KNAPP Sämst -->
+						<!-- <button class="header-button">
+							<span class="material-symbols-outlined">
+								arrow_upward
+							</span>
+							Sämst
+						</button> -->
+
+						<!-- SCOREBOARD-KNAPP Bästa -->
+						<!-- <button class="header-button">
+							<span class="material-symbols-outlined">
+								arrow_downward
+							</span>
+							Bästa
+						</button> -->
+
+						<!-- SCOREBOARD-KNAPP Vinst -->
+						<button id="list-only-wins-button" class="header-button">
+							Vinst
+						</button>
+
+						<!-- SCOREBOARD-KNAPP Förlust -->
+						<!-- <button id="list-only-losses-button" class="header-button">
+							Förlust
+						</button> -->
+						
+						<!-- SCOREBOARD-KNAPP Alla resultat -->
+						<!-- <button id="list-all-results-button" class="header-button">
+							Alla resultat
+						</button> -->
+
+						<!-- SCOREBOARD-KNAPP Senast -->
+						<button id="latest-score-button" class="header-button">
+							Senaste nederst
+						</button>
+
+						<span>Alternativ</span>
+						
+						<!-- SCOREBOARD-KNAPP #7: Ta bort -->
+						<button id="remove-results-with-specific-name-button" class="header-button">
+							<span class="material-symbols-outlined">
+								delete
+							</span>
+						</button>
+
+						<!-- SCOREBOARD-KNAPP #8: Stäng scoreboard -->
+						<button id="close-scoreboard-button" class="header-button" title="Stäng av scoreboarden">
+							<span class="material-symbols-outlined">
+								close
+							</span>
+						</button>
+
+					</div>
+					<div class="container-display-score">
+
+						<table id='score-table-static-header' class="score-table">
+							<tbody id="table-body" class="table-body">
+								<tr class="score-table-header-row">
+									<td class="table-head-data"> Spelare </td>
+									<td class="table-head-data score-table-head-data-ord"> Ord </td>
+									<td class="table-head-data"> Misstag </td>
+									<td class="table-head-data"> Vinst? </td>
+								</tr>
+							</tbody>
+
+
+						</table>
+					</div>
+				</header>
+			</section>
+
+			<!-- SCOREBOARD PVP-->
+			<section class="scoreboard-section-pvp hidden">
+				<header id ="scoreboard-header-PVP" class="header">
+					<h1 class="scoreboard-title">Scoreboard PVP</h1>
+					<div class="header-buttons">
+			
+						<span>Sortera listan</span>
+									
+						<!-- SCOREBOARD-KNAPP Vinst -->
+						<button id="list-only-wins-button-pvp" class="header-button">
+							Vinst
+						</button>
+			
+						<!-- SCOREBOARD-PVP-KNAPP Senast -->
+						<button id="latest-score-button-pvp" class="header-button">
+							Senast
+						</button>
+			
+						<span>Alternativ</span>
+									
+						<!-- SCOREBOARD-KNAPP #7: Ta bort -->
+						<button id="remove-results-with-specific-name-button-pvp" class="header-button">
+							<span class="material-symbols-outlined">
+								delete
+							</span>
+						</button>
+			
+						<!-- SCOREBOARD-KNAPP #8: Stäng scoreboard -->
+						<button id="close-scoreboard-button-PVP" class="header-button" title="Stäng av scoreboarden">
+							<span class="material-symbols-outlined">
+								close
+							</span>
+						</button>
+			
+					</div>
+					<div class="container-display-score container-display-score-pvp">
+			
+						<table id='score-table-pvp-static-header' class="score-table">
+							<tbody id="table-body-pvp" class="table-body">
+								<tr class="score-table-header-row">
+									<td class="table-head-data"> Gissare </td>
+									<td class="table-head-data"> Ordskapare </td>
+									<td class="table-head-data"> Ord </td>
+									<td class="table-head-data"> Misstag </td>
+									<td class="table-head-data"> Vinst? </td>
+								</tr>
+							</tbody>
+			
+			
+						</table>
+					</div>
+				</header>
+			</section>
+		</section>
+	</section>
+
+	<!-- Overlay -->
+	<div class="overlay">
+		<!-- Modals -->
+		
+		<!-- MODAL: Skriv in namn -->
+		<div id="enter-name-modal" class="modal">
+			<div class="title-center">
+				<h2>Välkommen till</h2>
+				<h1 class="main-title">Hangman</h1>
+			</div>
+			<div class="svårighetsgrad">
+			<p>Välj svårighetsgrad</p>
+			<button class="button" id="difficulty-easy"  title="Easy">
+				Easy
+			</button>
+			<button class="button" id="difficulty-medium"  title="Medium">
+				Medium
+			</button>
+			<button class="button" id="difficulty-hard"  title="Hard">
+				Hard
+			</button>
+			<p class="error-message-difficulty"></p>
+		</div>
+			<div>
+				<input id="name-input" class="text-input" type="text" placeholder="Vänligen skriv in ditt namn" value="" title="Namn här" />
+				<button class="button" id="name-enter-button">Redo att spela!</button>
+				<br>
+				<p class="error-message">  </p>
+			</div>
+		</div>
+
+		<!-- MODAL: Välj spelläge -->
+		<div id="gamemode-modal" class="modal hidden"><h2>Välj läge!</h2>
+			<div>
+				<div class="mode-buttons">
+				<button class="normal-mode button" id="vanligt-button">Vanligt</button>
+				<button class="pvp-mode button">PvP</button>
+			</div>
+				<div class="pvp-div">
+					<label for="pvp-name">Namn på den som gissar:</label>
+					<input type="text" class="text-input" class="pvp-name"
+					id="pvp-name1">
+					<label for="pvp-name">Namn på den som anger det hemliga ordet:</label>
+					<input type="text" class="text-input" class="pvp-name" id="pvp-name2">
+					<button id="pvp-start-button" class="button">Start game</button>
+				</div>
+				<div id="secret-name-div">
+				<label for="hemligt-ord">Ange det hemliga ordet</label>
+					<input type="text" id="secret-word-pvp">
+				</div>
+			</div>
+		</div>
+		<!-- MODAL: Vid förlust -->
+		<div id="lose-modal" class="modal hidden">
+			<h2 class="lose-title">Du förlorade!</h2>
+			<p>Det korrekta ordet var: <span id="correct-answer"></span></p>
+			<p>Vill du spela igen?</p>
+			<div>
+				<button class="reset-button button">Spela igen</button>
+				<button class="go-to-scoreboard-button button">Visa scoreboarden</button>
+			</div>
+		</div>
+
+		<!-- MODAL: Vid vinst -->
+		<div id="win-modal" class="modal hidden">
+			<h2 class="win-title">Du  vann!</h2>
+			<p>Antal gissningar: <span id="amount-tries"></span></p>
+			<p>Vill du spela igen?</p>
+			<div>
+				<button class="reset-button button">Spela igen</button>
+				<button class="go-to-scoreboard-button button">Visa scoreboarden</button>
+			</div>
+		</div>
+
+		<!-- MODAL: Om oss -->
+		<div id="about-modal" class="modal hidden">
+			<button class="button close" id="about-modal-close-button">X</button>
+			<div class="about-modal-mid">
+			<h1 class="main-title">Hangman</h1>
+		</div>
+			<h3>Skapad av:</h3>
+
+			<!-- Om oss - Robin -->
+		<div id="profile-img">
+			<div class="profile">
+				<img src="robin.png" width="124" height="124" alt="Robin">
+				<legend>Robin</legend>
+			</div>
+
+			<!-- Om oss - VictorL -->
+			<div class="profile">
+				<img src="victorl.png" width="124" height="124" alt="Victor L">
+				<legend>Victor L</legend>
+			</div>
+
+			<!-- Om oss - VictorB -->
+			<div class="profile">
+				<img src="victorb.png" width="124" height="124" alt="Victor B"> 
+				<legend>Victor B</legend>
+			</div>
+		</div>
+		</div>
+		<!-- MODAL: Ta bort data (Syns på scoreboard) -->
+		<div id="remove-player-data-modal" class="modal hidden">
+			<button class="button close" id="remove-player-data-modal-close-button">X</button>
+			<h2>Radera spelardata</h2>
+			<div>
+				<input class="text-input" placeholder="Skriv in ett spelarnamn" id="select-player-data-using-input" type="text">
+				<button class="button" id="select-player-data-using-input-button">Radera data!</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
